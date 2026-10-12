@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura & Hearth — Curated Storefront</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        },
+                        emeraldCustom: '#059669',
+                        terracotta: '#c2593f',
+                        cream: '#FAF7F2',
+                        sand: '#EFECE6'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar and glassmorphism styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF7F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .glass-header {
+            background: rgba(250, 247, 242, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .gradient-card-1 {
+            background: linear-gradient(135deg, #FFEDD5 0%, #FED7AA 100%);
+        }
+        .gradient-card-2 {
+            background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+        }
+        .gradient-card-3 {
+            background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%);
+        }
+        .gradient-card-4 {
+            background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
+        }
+        .hero-pattern {
+            background-color: #FAF7F2;
+            background-image: radial-gradient(#ea580c 0.75px, transparent 0.75px), radial-gradient(#ea580c 0.75px, #FAF7F2 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="bg-cream text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-40 glass-header border-b border-amber-900/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-400 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-sparkles text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-serif font-bold text-2xl tracking-tight text-slate-900 block leading-none">Aura &amp; Hearth</span>
+                    <span class="text-[10px] tracking-widest uppercase font-semibold text-brand-600 block mt-1">Artisan Storefront</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-slate-600 text-sm">
+                <a href="#store" class="hover:text-brand-600 transition-colors">Shop Collection</a>
+                <a href="#featured" class="hover:text-brand-600 transition-colors">Bestsellers</a>
+                <a href="#story" class="hover:text-brand-600 transition-colors">Our Ethos</a>
+            </nav>
+
+            <!-- Action Buttons (Converter & Cart Drawer Trigger) -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleConverterDrawer()" class="flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-brand-900 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all border border-amber-200">
+                    <i class="fa-solid fa-calculator text-brand-600"></i>
+                    <span class="hidden sm:inline">Unit Converter</span>
+                </button>
+
+                <button onclick="toggleCartDrawer()" class="relative bg-slate-900 hover:bg-brand-600 text-white p-2.5 sm:px-4 sm:py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md flex items-center gap-2.5 group">
+                    <i class="fa-solid fa-bag-shopping group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden sm:inline">Cart</span>
+                    <span id="cart-badge-count" class="bg-brand-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Showcase Section -->
+    <section class="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-amber-900/5 bg-gradient-to-b from-amber-50/50 to-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-100/80 border border-brand-200 text-brand-800 text-xs font-semibold tracking-wide">
+                        <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+                        NEW SEASON AUTUMN ARRIVALS 2026
+                    </div>
+                    
+                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.15]">
+                        Curated Goods for <br class="hidden sm:inline"/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-amber-600 to-terracotta italic font-normal">Inspired Living</span> &amp; Modern Spaces.
+                    </h1>
+
+                    <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Handcrafted home essentials, tactile workwear, and organic pantry staples—thoughtfully built for durability, texture, and everyday warmth.
+                    </p>
+
+                    <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#store" class="w-full sm:w-auto px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl shadow-lg shadow-brand-600/25 transition-all text-center flex items-center justify-center gap-3 group">
+                            <span>Explore Storefront</span>
+                            <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <button onclick="toggleConverterDrawer()" class="w-full sm:w-auto px-6 py-4 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-2xl border border-slate-200 shadow-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-ruler-combined text-brand-600"></i>
+                            <span>Quick Unit Tools</span>
+                        </button>
+                    </div>
+
+                    <!-- Highlight Badges -->
+                    <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80">
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">100%</p>
+                            <p class="text-xs text-slate-500 font-medium">Artisan Sourced</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">4.9★</p>
+                            <p class="text-xs text-slate-500 font-medium">Customer Rating</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">Free</p>
+                            <p class="text-xs text-slate-500 font-medium">Global Shipping $75+</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right Feature Banner Card -->
+                <div class="lg:col-span-5">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <!-- Decorative background glow -->
+                        <div class="absolute -inset-4 bg-gradient-to-r from-amber-300 to-brand-300 rounded-3xl blur-2xl opacity-40 -z-10"></div>
+                        
+                        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-100 relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Spotlight Item</span>
+                                <span class="text-slate-400 text-xs font-mono">ID: #AH-8092</span>
+                            </div>
+
+                            <div class="h-56 rounded-2xl bg-gradient-to-tr from-amber-100 via-orange-50 to-amber-200 flex items-center justify-center relative overflow-hidden mb-6 shadow-inner">
+                                <i class="fa-solid fa-mug-hot text-7xl text-brand-600/80 transform hover:scale-110 transition-transform duration-500"></i>
+                                <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-xl text-xs font-bold text-slate-800 shadow-sm">
+                                    Terracotta Craft
+                                </div>
+                            </div>
+
+                            <h3 class="font-serif text-2xl font-bold text-slate-900 mb-2">Handmade Ceramic Coffee Set</h3>
+                            <p class="text-slate-500 text-sm mb-6">Kiln-fired earthenware with double insulation glaze. Built for cozy mornings.</p>
+
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-slate-400 block font-semibold">Special Price</span>
+                                    <span class="text-2xl font-bold text-slate-900">$48.00</span>
+                                </div>
+                                <button onclick="addToCart(1)" class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold shadow-md transition-all text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Storefront Section -->
+    <main id="store" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-grow w-full">
+        
+        <!-- Section Title & Filter Tabs -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+            <div>
+                <h2 class="font-serif text-3xl font-bold text-slate-900">Explore Our Catalog</h2>
+                <p class="text-slate-500 text-sm mt-1">Select a category to filter through our curated physical goods.</p>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap gap-2 bg-slate-200/60 p-1.5 rounded-2xl max-w-full overflow-x-auto">
+                <button onclick="filterCategory('all')" id="btn-all" class="category-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white text-slate-900 shadow-sm">
+                    All Products
+                </button>
+                <button onclick="filterCategory('apparel')" id="btn-apparel" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+                    Apparel &amp; Wear
+                </button>
+                <button onclick="filterCategory('home')" id="btn-home" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+                    Home &amp; Living
+                </button>
+                <button onclick="filterCategory('pantry')" id="btn-pantry" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+                    Gourmet Pantry
+                </button>
+            </div>
+        </div>
+
+        <!-- Product Cards Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Products dynamic template render target via JS -->
+        </div>
+    </main>
+
+    <!-- Slide-Over Shopping Cart Drawer -->
+    <div id="cart-drawer-overlay" onclick="toggleCartDrawer()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        
+        <!-- Cart Drawer Header -->
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-cream">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-bag-shopping text-brand-600 text-xl"></i>
+                <h3 class="font-serif text-xl font-bold text-slate-900">Your Shopping Cart</h3>
+            </div>
+            <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200/50 transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items Scrollable List -->
+        <div id="cart-items-container" class="p-6 flex-grow overflow-y-auto space-y-4">
+            <!-- Dynamically populated cart items -->
+        </div>
+
+        <!-- Cart Drawer Footer Summary -->
+        <div class="p-6 border-t border-slate-100 bg-slate-50/80 space-y-4">
+            <div class="space-y-2 text-sm text-slate-600">
+                <div class="flex justify-between">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="font-semibold text-slate-800">$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Estimated Tax (8%)</span>
+                    <span id="cart-tax" class="font-semibold text-slate-800">$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Shipping</span>
+                    <span class="text-emerald-600 font-semibold">FREE</span>
+                </div>
+                <div class="border-t border-slate-200 pt-2 flex justify-between text-base font-bold text-slate-900">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-brand-600">$0.00</span>
+                </div>
+            </div>
+
+            <button onclick="checkoutCart()" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-2xl shadow-lg shadow-brand-600/20 transition-all text-center flex items-center justify-center gap-2">
+                <span>Proceed to Checkout</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Slide-Over Unit Converter Panel -->
+    <div id="converter-drawer-overlay" onclick="toggleConverterDrawer()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <aside id="converter-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        
+        <!-- Converter Header -->
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-amber-50">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-calculator text-brand-600 text-xl"></i>
+                <div>
+                    <h3 class="font-serif text-xl font-bold text-slate-900">Unit Converter</h3>
+                    <p class="text-xs text-slate-500">Quickly calculate garment &amp; size metrics</p>
+                </div>
+            </div>
+            <button onclick="toggleConverterDrawer()" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200/50 transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Converter Form Area -->
+        <div class="p-6 flex-grow overflow-y-auto space-y-6">
+            
+            <!-- Conversion Mode Selection -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Conversion Type</label>
+                <select id="conv-type" onchange="calculateConversion()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
+                    <option value="km-m">Kilometers to Meters (km → m)</option>
+                    <option value="m-km">Meters to Kilometers (m → km)</option>
+                    <option value="mi-km">Miles to Kilometers (mi → km)</option>
+                    <option value="in-cm">Inches to Centimeters (in → cm)</option>
+                    <option value="kg-lbs">Kilograms to Pounds (kg → lbs)</option>
+                </select>
+            </div>
+
+            <!-- Value Input -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Value to Convert</label>
+                <input type="number" id="conv-input" value="1" min="0" step="any" oninput="calculateConversion()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-lg font-bold text-slate-900 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
+            </div>
+
+            <!-- Conversion Output Box -->
+            <div class="bg-gradient-to-br from-amber-50 to-orange-100 p-6 rounded-2xl border border-amber-200/60 text-center space-y-2">
+                <span class="text-xs font-semibold uppercase text-brand-800 tracking-wider">Converted Result</span>
+                <div id="conv-output" class="text-3xl font-extrabold text-slate-900">1000 m</div>
+                <p id="conv-formula" class="text-xs text-slate-500 font-mono">1 km = 1,000 m</p>
+            </div>
+
+            <!-- Quick Preset Helper Buttons -->
+            <div>
+                <span class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Quick Presets</span>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="setConverterPreset(1)" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">1 Unit</button>
+                    <button onclick="setConverterPreset(5)" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">5 Units</button>
+                    <button onclick="setConverterPreset(10)" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">10 Units</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 border-t border-slate-100 bg-slate-50">
+            <button onclick="toggleConverterDrawer()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-sm transition-all">
+                Close Tools
+            </button>
+        </div>
+    </aside>
+
+    <!-- Footer Section -->
+    <footer id="story" class="bg-slate-900 text-slate-300 pt-16 pb-12 border-t border-slate-800 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-sparkles text-sm"></i>
+                        </div>
+                        <span class="font-serif font-bold text-xl text-white">Aura &amp; Hearth</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Curated apparel, housewares, and organic goods. Thoughtfully engineered for quality, texture, and everyday performance.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#store" class="hover:text-brand-500 transition-colors">All Storefront Goods</a></li>
+                        <li><a href="#store" onclick="filterCategory('apparel')" class="hover:text-brand-500 transition-colors">Workwear &amp; Apparel</a></li>
+                        <li><a href="#store" onclick="filterCategory('home')" class="hover:text-brand-500 transition-colors">Ceramics &amp; Home</a></li>
+                        <li><a href="#store" onclick="filterCategory('pantry')" class="hover:text-brand-500 transition-colors">Organic Pantry</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm text-white mb-4">Customer Care</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Shipping &amp; Delivery</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Returns &amp; Exchanges</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Sustainability Guarantee</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Store Locator</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm text-white mb-4">Stay Connected</h4>
+                    <p class="text-xs text-slate-400 mb-3">Subscribe for limited restock alerts and private seasonal drops.</p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="Enter your email" class="bg-slate-800 text-xs px-3 py-2 rounded-lg border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 flex-grow">
+                        <button onclick="showToast('Subscribed to newsletter updates!')" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors">Join</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <p>&copy; 2026 Aura &amp; Hearth Storefront. Handcrafted for performance &amp; style.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-slate-300">Privacy Policy</a>
+                    <a href="#" class="hover:text-slate-300">Terms of Service</a>
+                    <a href="#" class="hover:text-slate-300">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Message Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        // Storefront Products Data Schema
+        const products = [
+            {
+                id: 1,
+                name: "Handmade Ceramic Coffee Set",
+                category: "home",
+                price: 48.00,
+                rating: 4.9,
+                badge: "BESTSELLER",
+                badgeClass: "bg-amber-100 text-amber-800",
+                icon: "fa-mug-hot",
+                bgGradient: "from-amber-100 to-orange-100 text-amber-700",
+                description: "Earthenware set with double insulation glaze."
+            },
+            {
+                id: 2,
+                name: "Waxed Canvas Work Apron",
+                category: "apparel",
+                price: 58.00,
+                rating: 4.8,
+                badge: "POPULAR",
+                badgeClass: "bg-emerald-100 text-emerald-800",
+                icon: "fa-user-ninja",
+                bgGradient: "from-amber-200 to-yellow-100 text-amber-800",
+                description: "Heavyweight 16oz cotton canvas with solid brass buckles."
+            },
+            {
+                id: 3,
+                name: "Brushed Flannel Overshirt",
+                category: "apparel",
+                price: 74.00,
+                rating: 5.0,
+                badge: "NEW",
+                badgeClass: "bg-blue-100 text-blue-800",
+                icon: "fa-shirt",
+                bgGradient: "from-blue-100 to-indigo-100 text-blue-700",
+                description: "Ultra-soft woven wool blend for autumn layering."
+            },
+            {
+                id: 4,
+                name: "Ribbed Wool Beanie",
+                category: "apparel",
+                price: 28.00,
+                rating: 4.7,
+                badge: "ESSENTIAL",
+                badgeClass: "bg-slate-100 text-slate-800",
+                icon: "fa-hat-cowboy",
+                bgGradient: "from-slate-200 to-zinc-100 text-slate-700",
+                description: "Merino wool blend with fold-over cuff."
+            },
+            {
+                id: 5,
+                name: "Pre-Seasoned Cast Iron Skillet",
+                category: "home",
+                price: 52.00,
+                rating: 4.9,
+                badge: "BESTSELLER",
+                badgeClass: "bg-amber-100 text-amber-800",
+                icon: "fa-kitchen-set",
+                bgGradient: "from-orange-200 to-amber-100 text-amber-900",
+                description: "10.25-inch heavy-gauge iron for perfect searing."
+            },
+            {
+                id: 6,
+                name: "Organic Wildflower Honey",
+                category: "pantry",
+                price: 18.00,
+                rating: 4.9,
+                badge: "ORGANIC",
+                badgeClass: "bg-emerald-100 text-emerald-800",
+                icon: "fa-jar",
+                bgGradient: "from-amber-100 to-yellow-200 text-amber-800",
+                description: "Raw, unfiltered honey harvested from sustainable hives."
+            },
+            {
+                id: 7,
+                name: "Artisan Sourdough Starter Kit",
+                category: "pantry",
+                price: 24.00,
+                rating: 4.8,
+                badge: "NEW",
+                badgeClass: "bg-blue-100 text-blue-800",
+                icon: "fa-bread-slice",
+                bgGradient: "from-amber-50 to-orange-100 text-amber-800",
+                description: "Includes dehydrated 50-year heritage sourdough culture."
+            },
+            {
+                id: 8,
+                name: "Flaky Sea Salt Crock",
+                category: "pantry",
+                price: 14.00,
+                rating: 4.6,
+                badge: "ESSENTIAL",
+                badgeClass: "bg-slate-100 text-slate-800",
+                icon: "fa-cubes-stacked",
+                bgGradient: "from-teal-50 to-emerald-100 text-teal-700",
+                description: "Hand-harvested mineral salt with ceramic keeper."
+            }
+        ];
+
+        // State variables
+        let cart = [];
+        let currentCategory = 'all';
+
+        // Initial setup on window load
+        window.onload = function() {
+            renderProducts();
+            calculateConversion();
+            updateCartUI();
+        };
+
+        // Render products grid
+        function renderProducts() {
+            const container = document.getElementById('product-grid');
+            const filtered = currentCategory === 'all' 
+                ? products 
+                : products.filter(p => p.category === currentCategory);
+
+            container.innerHTML = filtered.map(product => `
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <!-- Image / Icon Container -->
+                        <div class="h-48 rounded-2xl bg-gradient-to-br ${product.bgGradient} flex items-center justify-center relative overflow-hidden mb-4 shadow-inner">
+                            <i class="fa-solid ${product.icon} text-5xl transform group-hover:scale-110 transition-transform duration-300"></i>
+                            <span class="absolute top-3 left-3 text-[10px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full ${product.badgeClass} shadow-sm">
+                                ${product.badge}
+                            </span>
+                        </div>
+
+                        <!-- Card Info -->
+                        <div class="flex items-center gap-1 text-amber-500 text-xs font-bold mb-1">
+                            <i class="fa-solid fa-star"></i>
+                            <span>${product.rating}</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base group-hover:text-brand-600 transition-colors">${product.name}</h3>
+                        <p class="text-xs text-slate-500 mt-1 line-clamp-2">${product.description}</p>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-lg font-extrabold text-slate-900">$${product.price.toFixed(2)}</span>
+                        <button onclick="addToCart(${product.id})" class="bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-800 p-2.5 rounded-xl transition-all font-semibold flex items-center gap-2 text-xs">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Category Filter Logic
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeBtn = document.getElementById(`btn-${cat}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+                activeBtn.classList.remove('text-slate-600');
+            }
+
+            renderProducts();
+        }
+
+        // Cart Drawer Mechanics
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`Added "${product.name}" to your cart!`);
+        }
+
+        function updateQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(i => i.id !== productId);
+            updateCartUI();
+            showToast("Item removed from cart.");
+        }
+
+        function updateCartUI() {
+            const cartContainer = document.getElementById('cart-items-container');
+            const totalBadge = document.getElementById('cart-badge-count');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            totalBadge.innerText = totalItems;
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="text-center py-12 text-slate-400">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-3 text-slate-300"></i>
+                        <p class="font-semibold text-slate-600">Your cart is empty</p>
+                        <p class="text-xs text-slate-400 mt-1">Explore our collection and add items!</p>
+                    </div>
+                `;
+            } else {
+                cartContainer.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${item.bgGradient} flex items-center justify-center text-xl">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-slate-900">${item.name}</h4>
+                                <span class="text-xs font-semibold text-brand-600">$${item.price.toFixed(2)}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center bg-white rounded-lg border border-slate-200">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="px-2 py-1 text-xs text-slate-600 hover:text-brand-600 font-bold">-</button>
+                                <span class="px-2 text-xs font-bold text-slate-800">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="px-2 py-1 text-xs text-slate-600 hover:text-brand-600 font-bold">+</button>
+                            </div>
+                            <button onclick="removeFromCart(${item.id})" class="text-slate-400 hover:text-rose-600 p-1">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Calculations
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08;
+            const total = subtotal + tax;
+
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('cart-tax').innerText = `$${tax.toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        // Toggle Drawer Visibility
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-drawer-overlay');
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function toggleConverterDrawer() {
+            const drawer = document.getElementById('converter-drawer');
+            const overlay = document.getElementById('converter-drawer-overlay');
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // Unit Converter Logic
+        function calculateConversion() {
+            const type = document.getElementById('conv-type').value;
+            const val = parseFloat(document.getElementById('conv-input').value) || 0;
+            const outputEl = document.getElementById('conv-output');
+            const formulaEl = document.getElementById('conv-formula');
+
+            let result = 0;
+            let unit = '';
+            let formula = '';
+
+            switch (type) {
+                case 'km-m':
+                    result = val * 1000;
+                    unit = 'm';
+                    formula = '1 km = 1,000 m';
+                    break;
+                case 'm-km':
+                    result = val / 1000;
+                    unit = 'km';
+                    formula = '1,000 m = 1 km';
+                    break;
+                case 'mi-km':
+                    result = val * 1.60934;
+                    unit = 'km';
+                    formula = '1 mile ≈ 1.609 km';
+                    break;
+                case 'in-cm':
+                    result = val * 2.54;
+                    unit = 'cm';
+                    formula = '1 inch = 2.54 cm';
+                    break;
+                case 'kg-lbs':
+                    result = val * 2.20462;
+                    unit = 'lbs';
+                    formula = '1 kg ≈ 2.205 lbs';
+                    break;
+            }
+
+            outputEl.innerText = `${result.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${unit}`;
+            formulaEl.innerText = formula;
+        }
+
+        function setConverterPreset(val) {
+            document.getElementById('conv-input').value = val;
+            calculateConversion();
+        }
+
+        function checkoutCart() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty! Add items first.");
+                return;
+            }
+            showToast("Order placed successfully! Thank you.");
+            cart = [];
+            updateCartUI();
+            toggleCartDrawer();
+        }
+
+        // Custom Toast Notifications
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto border border-slate-700';
+            toast.innerHTML = `
+                <i class="fa-solid fa-circle-check text-brand-500 text-sm"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
